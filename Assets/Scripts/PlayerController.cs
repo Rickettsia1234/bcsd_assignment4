@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerMove : MonoBehaviour
 {
     public float maxSpeed = 4.1f;
+    public float jumpPower = 15f;
 
     private Rigidbody2D rigid;
     private SpriteRenderer spriteRenderer;
@@ -51,10 +52,32 @@ public class PlayerMove : MonoBehaviour
         {
             rigid.linearVelocity = new Vector2(rigid.linearVelocity.x * 0.5f, rigid.linearVelocity.y);
         }
+
+        if (rigid.linearVelocity.y < 0)
+        {
+            Debug.DrawRay(rigid.position, Vector2.down, new Color(0, 1, 0));
+            RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector2.down, 1f, LayerMask.GetMask("Platform"));
+            if (rayHit.collider != null)
+            {
+                if (rayHit.distance < 0.5f)
+                {
+                    anim.SetBool("isJumping", false);
+                }
+            }
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
         inputVector = context.ReadValue<Vector2>();
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (context.started && !anim.GetBool("isJumping"))
+        {
+            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            anim.SetBool("isJumping", true);
+        }
     }
 }
