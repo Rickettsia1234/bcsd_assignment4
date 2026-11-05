@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Platform
   - Enemy
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Player
   - PlayerDemage
   - Enemy
-  - 
+  - Item
   - 
   - 
   - 
